@@ -1,4 +1,0 @@
-repository "game client@nikolai_kaige@cloud"
-  path "/"
-    br "/main"
-    co "/main"

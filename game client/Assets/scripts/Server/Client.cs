@@ -10,7 +10,7 @@ public class Client : MonoBehaviour
     public static Client instance;
     public static int databuffersize = 4096;
 
-    public string ip = "127.0.0.1";
+    private string ip;
     public int port = 26950;
     public int myID = 0;
     public TCP tcp;
@@ -245,9 +245,8 @@ public class Client : MonoBehaviour
 
                 HandleData(_data);
             }
-            catch(Exception _ex)
+            catch
             {
-                Debug.Log("could not receive callback: " + _ex);
                 Disconnect();
             }
         }
