@@ -245,8 +245,9 @@ public class Client : MonoBehaviour
 
                 HandleData(_data);
             }
-            catch
+            catch(Exception _ex)
             {
+                Debug.Log("could not receive callback: " + _ex);
                 Disconnect();
             }
         }
