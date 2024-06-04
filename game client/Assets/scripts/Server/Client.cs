@@ -42,10 +42,8 @@ public class Client : MonoBehaviour
     }
     private void Start()
     {
-        //temporarily trying to get current computer's IP
-        Debug.Log(GetIPAddress());
-
-       UImanager.instance.ChangePublicIP(GetIPAddress());
+        //
+        UImanager.instance.SetPublicIP(GetIPAddress());
 
         udp = new UDP();
         tcp = new TCP();

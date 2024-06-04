@@ -12,7 +12,7 @@ public class UImanager : MonoBehaviour
 
     public TMP_InputField IPfield;
 
-    public Text publicIP;
+    public TextMeshProUGUI publicIP;
 
     private void Awake()
     {   
@@ -25,8 +25,8 @@ public class UImanager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-        
-        publicIP = GameObject.Find("IPtext").GetComponent<Text>();
+
+        publicIP = GameObject.Find("IPtext").GetComponent<TextMeshProUGUI>();
     }
 
     public void ConnectToServer()
@@ -46,7 +46,8 @@ public class UImanager : MonoBehaviour
         Client.instance.ConnectToServer();
     }
 
-    public void ChangePublicIP(string _ip)
+    //this is done in the client script. I know it's stupid, im sorry
+    public void SetPublicIP(string _ip)
     {
         publicIP.text = "Your IP: " + _ip;
     }
