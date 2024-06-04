@@ -4,13 +4,14 @@ using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
 using System;
+using System.IO;
 
 public class Client : MonoBehaviour
 {
     public static Client instance;
     public static int databuffersize = 4096;
 
-    private string ip;
+    private string ip = "127.0.0.1";
     public int port = 26950;
     public int myID = 0;
     public TCP tcp;
@@ -41,9 +42,41 @@ public class Client : MonoBehaviour
     }
     private void Start()
     {
-        tcp = new TCP();
+        //temporarily trying to get current computer's IP
+        Debug.Log(GetIPAddress());
+
+       UImanager.instance.ChangePublicIP(GetIPAddress());
+
         udp = new UDP();
+        tcp = new TCP();
     }
+
+    //stolen code that I stole, it'll give you an error if you aren't connected to the internet
+    static string GetIPAddress()  
+    {  
+        try
+        {
+            String address = "";  
+            WebRequest request = WebRequest.Create("http://checkip.dyndns.org/");  
+            using (WebResponse response = request.GetResponse())  
+                using (StreamReader stream = new StreamReader(response.GetResponseStream()))  
+                {  
+                    address = stream.ReadToEnd();  
+                }  
+            int first = address.IndexOf("Address: ") + 9;  
+            int last = address.LastIndexOf("</body>");  
+            address = address.Substring(first, last - first);  
+        
+            return address; 
+        }
+        catch
+        {
+            Debug.Log("could not retrieve IP");
+
+            return "no IP";
+        }
+         
+    } 
 
     private void OnApplicationQuit()
     {
@@ -196,14 +229,19 @@ public class Client : MonoBehaviour
         public UdpClient socket;
         public IPEndPoint endpoint;
 
+        //THIS IS THE BITCH (possible errors arising from assignment of endpoint of UDP)
         public UDP()
         {
+            //connect to self at first
             endpoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
         }
 
         public void Connect(int _localport)
         {
             socket = new UdpClient(_localport);
+            
+            //update endpoint so that it connects to the host!!
+            endpoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
 
             socket.Connect(endpoint);
             socket.BeginReceive(ReceiveCallBack, null);

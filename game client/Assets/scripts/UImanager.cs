@@ -12,8 +12,10 @@ public class UImanager : MonoBehaviour
 
     public TMP_InputField IPfield;
 
+    public Text publicIP;
+
     private void Awake()
-    {
+    {   
         if(instance == null)
         {
             instance = this;
@@ -23,6 +25,8 @@ public class UImanager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
+        
+        publicIP = GameObject.Find("IPtext").GetComponent<Text>();
     }
 
     public void ConnectToServer()
@@ -36,8 +40,14 @@ public class UImanager : MonoBehaviour
         }
         else
         {
+            //if we don't have any input, assume the server is being hosted on the same computer
             Client.instance.SetIP("127.0.0.1");
         }
         Client.instance.ConnectToServer();
+    }
+
+    public void ChangePublicIP(string _ip)
+    {
+        publicIP.text = "Your IP: " + _ip;
     }
 }
